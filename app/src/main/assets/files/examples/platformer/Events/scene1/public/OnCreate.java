@@ -1,1 +1,0 @@
-setCameraXY(player);

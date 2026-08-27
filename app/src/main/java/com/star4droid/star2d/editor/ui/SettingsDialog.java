@@ -36,10 +36,13 @@ public class SettingsDialog extends VisDialog {
 		
 		SpinnerInput lang = new SpinnerInput();
 		lang.setNameText(getTrans("language"));
-		lang.setData("English","العربيه","Français","Português","Русский","Español");
-		String language = preferences.getString("lang","en");
+		lang.setData("فارسی","English","العربيه","Français","Português","Русский","Español");
+		String language = preferences.getString("lang","fa");
 		
 		switch(language){
+		    case "fa":
+		        language="فارسی";
+		        break;
 		    case "en":
 		        language="English";
 		        break;
@@ -59,7 +62,7 @@ public class SettingsDialog extends VisDialog {
 		        language = "Русский";
 		        break;
 		    default:
-		        language="English";
+		        language="فارسی";
 		}
 		lang.setValue(language);
 		table.add(lang).padTop(10).row();
@@ -107,12 +110,15 @@ public class SettingsDialog extends VisDialog {
 			    try {
 			        worldScalef = Utils.getFloat(worldScale.getValue());
 			    } catch(Exception ex){}
-				String code = lang.getValue().substring(0,2).toLowerCase();
-				String newLang = code.equals("en") ? "en" : "ar";
-				if(code.equals("fr")) newLang = "fr";
-				if(code.equals("po")) newLang = "br";
-				if(code.equals("Ру")) newLang = "es";
-				if(code.equals("es")) newLang = "es";
+				String val = lang.getValue();
+				String newLang = "en";
+				if(val.startsWith("فارسی") || val.contains("فا")) newLang = "fa";
+				else if(val.startsWith("English") || val.startsWith("en")) newLang = "en";
+				else if(val.startsWith("العرب") || val.startsWith("ar")) newLang = "ar";
+				else if(val.startsWith("Fran") || val.startsWith("fr")) newLang = "fr";
+				else if(val.startsWith("Port") || val.startsWith("br")) newLang = "br";
+				else if(val.startsWith("Рус") || val.startsWith("ru")) newLang = "ru";
+				else if(val.startsWith("Esp") || val.startsWith("es")) newLang = "es";
 				preferences.putBoolean("Auto Completion",codeCompletion.getValue().equals("true"))
 					.putBoolean("SaveUndoRedo",saveUndoRedo.getValue().equals("true"))
 					.putBoolean("AutoSave",autoSave.getValue().equals("true"))

@@ -1,7 +1,7 @@
 package com.star4droid.star2d.Helpers;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import java.io.*;
 import java.nio.file.*;
 import java.security.*;
@@ -9,6 +9,8 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class FilesChangeDetector {
+    private static final Gson gson = new Gson();
+
     public static boolean detect(Path filesPath, Path jsonDataPath) throws IOException {
         Map<String, String> oldChecksums = readOldChecksums(jsonDataPath);
         Map<String, String> currentChecksums = computeCurrentChecksums(filesPath);
@@ -70,12 +72,15 @@ public class FilesChangeDetector {
         if (!Files.exists(jsonDataPath)) {
             return new HashMap<>();
         }
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(jsonDataPath.toFile(), new TypeReference<Map<String, String>>() {});
+        try (Reader reader = Files.newBufferedReader(jsonDataPath)) {
+            Map<String, String> result = gson.fromJson(reader, new TypeToken<Map<String, String>>(){}.getType());
+            return result != null ? result : new HashMap<>();
+        }
     }
 
     private static void saveChecksums(Map<String, String> checksums, Path jsonDataPath) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(jsonDataPath.toFile(), checksums);
+        try (Writer writer = Files.newBufferedWriter(jsonDataPath)) {
+            gson.toJson(checksums, writer);
+        }
     }
 }

@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -111,9 +112,20 @@ public class EditorActivity extends AppCompatActivity implements AndroidFragment
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         try {
-            Utils.extractAssetFile(this, "cp.zip", FileUtil.getPackageDataDir(this) + "/bin/cp.jar");
+            String cpDest = FileUtil.getPackageDataDir(this) + "/bin/cp.jar";
+            try {
+                Utils.extractAssetFile(this, "cp.zip", cpDest);
+            } catch (Exception e) {
+                try {
+                    Utils.extractAssetFile(this, "java/game.zip", cpDest);
+                } catch (Exception ex) {
+                    if (!FileUtil.isExistFile(cpDest)) {
+                        FileUtil.writeFile(cpDest, "");
+                    }
+                }
+            }
         } catch (Exception e) {
-            throw new RuntimeException("extracting cp error "+e);
+            Log.e("EditorActivity", "extracting cp warning: " + e.getMessage());
         }
 		files_picker =
         registerForActivityResult(
@@ -332,6 +344,49 @@ public class EditorActivity extends AppCompatActivity implements AndroidFragment
             }
         }.start();
     }
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		try {
+			if (editor != null && editor.getApp() != null) {
+				boolean isLandscape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
+				Gdx.app.postRunnable(() -> {
+					try {
+						if (editor.getApp() != null) {
+							editor.getApp().resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+						}
+					} catch(Exception ignored){}
+				});
+			}
+		} catch (Exception ignored) {}
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		try {
+			if (editor != null && editor.getApp() != null) {
+				if (editor.getApp().getProject() != null) {
+					outState.putString("saved_project_path", editor.getApp().getProject().getPath());
+					if (editor.getApp().getEditor() != null) {
+						outState.putString("saved_scene_name", editor.getApp().getEditor().getScene());
+						editor.getApp().getProject().save(editor.getApp().getEditor());
+					}
+				}
+			}
+		} catch (Exception ignored) {}
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		try {
+			if (editor != null && editor.getApp() != null && editor.getApp().getProject() != null && editor.getApp().getEditor() != null) {
+				editor.getApp().getProject().save(editor.getApp().getEditor());
+			}
+		} catch (Exception ignored) {}
+	}
 
 	@Override
 	protected void onResume() {

@@ -62,8 +62,12 @@ public class CompileThread extends Thread {
 			writeFile(filesPath+"/java.version",jv);
 		}
 		if(!isExistFile(dataDir.concat("/bin/cp.jar"))){
-			push(CHANGE_ERROR,CP_NOT_FOUND);
-			return;
+			try {
+				Gdx.files.internal("java/game.zip").copyTo(Gdx.files.absolute(dataDir+"/bin/cp.jar"));
+			} catch(Exception e) {
+				push(CHANGE_ERROR,CP_NOT_FOUND);
+				return;
+			}
 		}
         //Utils.extractAssetFile(context,"java/PlayerItem.java",filesPath+"/com/star4droid/star2d/player/PlayerItem.java");
         Gdx.files.internal("java/PlayerItem.java").copyTo(Gdx.files.absolute(filesPath+"/com/star4droid/star2d/player/PlayerItem.java"));
@@ -110,7 +114,17 @@ public class CompileThread extends Thread {
 				return;
 			}
 		} else {
-			JavaCompiler compiler= com.sun.tools.javac.api.JavacTool.create();
+			JavaCompiler compiler = null;
+			try {
+				Class<?> javacToolClass = Class.forName("com.sun.tools.javac.api.JavacTool");
+				compiler = (JavaCompiler) javacToolClass.getMethod("create").invoke(null);
+			} catch(Throwable t) {
+				compiler = javax.tools.ToolProvider.getSystemJavaCompiler();
+			}
+			if(compiler == null) {
+				push(CHANGE_ERROR, "Java compiler not available");
+				return;
+			}
 			String cp_path=dataDir.concat("/bin/cp.jar"),
 			addition=dataDir.concat("/bin/addition.jar");
 			//Uri uri1 = Uri.fromFile(new java.io.File(cp_path)),

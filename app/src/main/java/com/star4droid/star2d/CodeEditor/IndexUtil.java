@@ -38,15 +38,31 @@ public class IndexUtil {
 	}
 	
 	public static void loadJdk(Project project,Context context,String... other) throws Exception { 
-		InputStreamReader reader = new InputStreamReader(context.getAssets().open("editor/index.json"));
 		IndexStore indexStore = new IndexStore();
 		ModuleManager manager=getModule(project);
-		manager.addDependingModule(indexStore.readModule(reader));
-		manager.addDependingModule(indexStore.readModule(new InputStreamReader(context.getAssets().open("editor/libgdx.json"))));
-		manager.addDependingModule(indexStore.readModule(new InputStreamReader(context.getAssets().open("editor/visui.json"))));
-		for(String s:other)
-				manager.addDependingModule(indexStore.readModule(getInputStream(s)));
-		
+		if (manager == null) return;
+		try {
+			InputStreamReader reader = new InputStreamReader(context.getAssets().open("editor/index.json"));
+			manager.addDependingModule(indexStore.readModule(reader));
+		} catch(Exception ignored){}
+		try {
+			manager.addDependingModule(indexStore.readModule(new InputStreamReader(context.getAssets().open("editor/libgdx.json"))));
+		} catch(Exception ignored){}
+		try {
+			manager.addDependingModule(indexStore.readModule(new InputStreamReader(context.getAssets().open("editor/visui.json"))));
+		} catch(Exception ignored){}
+		try {
+			manager.addDependingModule(indexStore.readModule(new InputStreamReader(context.getAssets().open("editor/addition.json"))));
+		} catch(Exception ignored){}
+		if (other != null) {
+			for(String s:other) {
+				try {
+					if (s != null && !s.isEmpty() && new java.io.File(s).exists()) {
+						manager.addDependingModule(indexStore.readModule(getInputStream(s)));
+					}
+				} catch(Exception ignored){}
+			}
+		}
 	}
 	
 	public static InputStreamReader getInputStream(String file) throws Exception {

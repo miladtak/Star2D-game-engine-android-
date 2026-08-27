@@ -19,6 +19,12 @@ android {
         }
     }
     signingConfigs {
+        debug {
+            storeFile file("${rootDir}/debug.keystore")
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
         release {
             def keystorePath = System.getenv("KEYSTORE_FILE") ?: "Star4droid.jks"
             def keystoreFile = file(keystorePath)
@@ -39,17 +45,15 @@ android {
         targetSdk 36
         versionCode 47
         versionName "0.4.7Beta"
-        externalNativeBuild {
-            cmake {
-                arguments "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
-            }
-        }
         vectorDrawables { 
             useSupportLibrary true
         }
     }
 
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
         release {
             signingConfig signingConfigs.release
             minifyEnabled false
@@ -75,7 +79,13 @@ android {
     buildFeatures {
         buildConfig true
     }
-    
+
+    packaging {
+        resources {
+            pickFirsts += ['org/eclipse/jdt/**', 'META-INF/**', '**/*.rsc', '**/*.properties']
+            excludes += ['META-INF/INDEX.LIST', 'META-INF/DEPENDENCIES']
+        }
+    }
 }
 
 ext {
@@ -97,11 +107,12 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.google.guava:guava:32.0.1-android'
   //  implementation 'com.google.guava:guava:guava-33.4.0-jre'
+    implementation 'org.eclipse.jdt:ecj:3.26.0'
     implementation 'com.android.tools:r8:8.1.56'
     implementation platform("io.github.Rosemoe.sora-editor:bom:0.23.6")
     implementation "io.github.Rosemoe.sora-editor:editor"
     implementation "io.github.Rosemoe.sora-editor:language-textmate"
-    implementation 'com.badlogicgames.gdx:gdx:$gdxVersion'
+    implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
     implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
     
     natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
@@ -118,15 +129,15 @@ dependencies {
     natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
 
     
-    testImplementation 'com.badlogicgames.gdx:gdx-platform:$gdxVersion'
+    testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion"
     // https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-backend-lwjgl
-    testImplementation 'com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion'
+    testImplementation "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
     // https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-backend-android
-    implementation 'com.badlogicgames.gdx:gdx-backend-android:1.13.0'
+    implementation "com.badlogicgames.gdx:gdx-backend-android:1.13.0"
     // https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-box2d
-    implementation 'com.badlogicgames.gdx:gdx-box2d:1.13.0'
+    implementation "com.badlogicgames.gdx:gdx-box2d:1.13.0"
     // https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-box2d-platform
-    testImplementation 'com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion'
+    testImplementation "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion"
     constraints {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0") {
             because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
@@ -136,7 +147,7 @@ dependencies {
         }
     }
 // https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-box2d
-    implementation 'com.badlogicgames.gdx:gdx-box2d:$gdxVersion'
+    implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     
     implementation(platform("com.google.firebase:firebase-bom:34.3.0"))
 

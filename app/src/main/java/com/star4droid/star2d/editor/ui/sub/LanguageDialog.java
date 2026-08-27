@@ -10,12 +10,12 @@ import com.star4droid.star2d.editor.utils.Lang;
 public class LanguageDialog extends VisDialog {
 	TestApp app;
 	public LanguageDialog(TestApp app){
-		super("Language");
+		super(Lang.getTrans("language"));
 		this.app = app;
 		setMovable(false);
 		setResizable(false);
 		reset();
-		addLang("العربيه","ar");
+		addLang("فارسی (Persian)","fa");
 		addLang("English","en");
 	}
 	
@@ -30,6 +30,6 @@ public class LanguageDialog extends VisDialog {
 				hide();
 			}
 		});
-		add(lang).size(170,100).growX().pad(5).row();
+		add(lang).size(220,70).growX().pad(6).row();
 	}
 }

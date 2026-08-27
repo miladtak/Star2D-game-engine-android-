@@ -56,30 +56,19 @@ public class Editor extends FrameLayout {
 		FrameLayout frameLayout = new FrameLayout(getContext());
 		testApp = new TestApp();
 		testApp.setWhenAppReady(whenAppReady);
-		frameLayout.setId(2);
-		addView(frameLayout);
-		/*
-		libgdxFragment = new LibgdxFragment(testApp);
-		ViewPager2 viewPager2 = new ViewPager2(getContext());
-		viewPager2.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
-		viewPager2.setBackgroundColor(android.graphics.Color.BLUE);
-		viewPager2.setAdapter(new FragmentAdapter((AppCompatActivity)getContext(),libgdxFragment));
-		addView(viewPager2);
-		viewPager2.setFocusable(false);
-		*/
+		int containerId = View.generateViewId();
+		frameLayout.setId(containerId);
+		addView(frameLayout, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		
-		/*
-		viewPager2.setOnTouchListener((v,ev)->{
-			disableTouch(viewPager2);
-			android.widget.Toast.makeText(getContext(),"disable work",1500).show();
-			viewPager2.setOnTouchListener(null);
-			return true;
-		});
-		*/
-		//new Handler(Looper.getMainLooper()).postDelayed(()->disableTouch(viewPager2)
-					//,2500);
-		((AppCompatActivity)getContext()).getSupportFragmentManager().beginTransaction()
-				.replace(frameLayout.getId(),new LibgdxFragment(testApp)).commit();
+		try {
+			if(getContext() instanceof AppCompatActivity) {
+				((AppCompatActivity)getContext()).getSupportFragmentManager().beginTransaction()
+						.replace(containerId, new LibgdxFragment(testApp))
+						.commitAllowingStateLoss();
+			}
+		} catch(Exception e) {
+			android.util.Log.e("Editor", "Fragment transaction failed: " + e.getMessage());
+		}
 	}
 	
 	public void setWhenAppReady(Runnable runnable){

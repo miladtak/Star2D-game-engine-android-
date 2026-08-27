@@ -45,12 +45,14 @@ public class DebugActivity extends Activity {
 		button1 = findViewById(R.id.button1);
 		button2 = findViewById(R.id.button2);
 		
+		button1.setText("Share Error");
 		button1.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View _view) {
-				intent.setAction(Intent.ACTION_VIEW);
-				intent.setData(Uri.parse("https://m.me/Star4Droid2"));
-				startActivity(intent);
+				Intent shareIntent = new Intent(Intent.ACTION_SEND);
+				shareIntent.setType("text/plain");
+				shareIntent.putExtra(Intent.EXTRA_TEXT, textview2.getText().toString());
+				startActivity(Intent.createChooser(shareIntent, "Share Error"));
 			}
 		});
 		

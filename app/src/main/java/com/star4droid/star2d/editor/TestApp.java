@@ -129,45 +129,36 @@ public class TestApp implements ApplicationListener {
 	
 	public void setOrienation(boolean isLandscape){
 		this.landscape = isLandscape;
-		this.orienationChangeListener.onChange(isLandscape);
+		if (this.orienationChangeListener != null) {
+			this.orienationChangeListener.onChange(isLandscape);
+		}
 		
 		boolean sc1 = false;
-		final Array<LibgdxEditor> cloneArray = new Array<>();
-		cloneArray.addAll(editors);
-		
-		for(LibgdxEditor editor:editors){
-			editor.setLandscape(isLandscape);
-			if(editor.getScene().equals("scene1")) sc1 = true;
+		for(LibgdxEditor ed:editors){
+			ed.setLandscape(isLandscape);
+			if(ed.getScene().equals("scene1")) sc1 = true;
 		}
 		PropertySet<String,Object> propertySet=null;
-		if(!sc1){
-			propertySet=PropertySet.getFrom(Gdx.files.absolute(project.getConfig("scene1")).readString());
-			propertySet.put("or",isLandscape?"":"portrait");
-			Gdx.files.absolute(project.getConfig("scene1")).writeString(propertySet.toString(),false);
+		if(!sc1 && project != null){
+			try {
+				propertySet=PropertySet.getFrom(Gdx.files.absolute(project.getConfig("scene1")).readString());
+				propertySet.put("or",isLandscape?"":"portrait");
+				Gdx.files.absolute(project.getConfig("scene1")).writeString(propertySet.toString(),false);
+			} catch(Exception ignored){}
 		}
-		if(project!=null && preferences.getBoolean("AutoSave",true))
-			for(LibgdxEditor editor:editors)
-				project.save(editor);
-		
-		editors.clear();
-		Timer.schedule(new Timer.Task(){
-			@Override
-			public void run() {
-				for(LibgdxEditor editor:cloneArray){
-        			openSceneInNewEditor(editor.getScene());
-        			editor.dispose();
-        		}
-        		for(LibgdxEditor ed:editors)
-        		    ed.setLandscape(isLandscape);
-        		setCurrentEditor(currentEditorPos);
-        		toast("orientation set to "+(editor.isLandscape()?"landscape":"portrait"));
+		if(project!=null && preferences.getBoolean("AutoSave",true)) {
+			for(LibgdxEditor ed:editors) {
+				try {
+					project.save(ed);
+				} catch(Exception ignored){}
 			}
-		},1.5f);
+		}
 		
-		// closeProject(false);
-		// if(propertySet!=null)
-			// openProject(project,propertySet);
-		// else openProject(project);
+		Gdx.app.postRunnable(()->{
+			try {
+				resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			} catch(Exception ignored){}
+		});
 	}
 	
 	public SimpleNote getSimpleNote(){
@@ -490,6 +481,10 @@ public class TestApp implements ApplicationListener {
 	
 	public LibgdxEditor getEditor(){
 		return editor;
+	}
+	
+	public Project getProject(){
+		return project;
 	}
 	
 	public Stage getUiStage(){

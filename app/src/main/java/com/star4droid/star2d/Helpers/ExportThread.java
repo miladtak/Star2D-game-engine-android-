@@ -10,7 +10,7 @@ import axml.xml.AxmlUtil;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.star4droid.star2d.Utils;
 import com.star4droid.star2d.evo.R;
-import com.tyron.code.util.ApkInstaller;
+import android.content.Intent;
 import java.util.ArrayList;
 import java.util.Random;
 import net.lingala.zip4j.ZipFile;
@@ -138,20 +138,14 @@ public class ExportThread extends Thread {
 				
 			});
 			alertD.setPositiveButton(context.getString(R.string.install),(dl,which)->{
-			    android.os.StrictMode.setVmPolicy(new
-			android.os.StrictMode.VmPolicy.Builder().build());
-			if(android.os.Build.VERSION.SDK_INT>=24){
-							try{
-											java.lang.reflect.Method
-											m=android.os.StrictMode.class.getMethod(
-											"disableDeathOnFileUriExposure");
-											m.invoke(null);
-							}
-							catch(Exception e) {
-											//showMessage(e.toString());
-							}
-			}
-				ApkInstaller.installApplication(context,export_path);
+				Intent intent = new Intent(Intent.ACTION_VIEW);
+				intent.setDataAndType(export_path, "application/vnd.android.package-archive");
+				intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
+				try {
+					context.startActivity(intent);
+				} catch(Exception e) {
+					Log.e("ExportThread", "Error opening APK: " + e.getMessage());
+				}
 			});
 			alertD.create().show();
 		});

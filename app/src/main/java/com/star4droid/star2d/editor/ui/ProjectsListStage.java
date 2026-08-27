@@ -164,29 +164,7 @@ public class ProjectsListStage extends Stage {
         });
         smallButtonsTable.add(nodeLibraryTable).size(150, 100).padRight(20).padTop(8).row();
 
-        // social media...
-        VisTable facebookTable = new VisTable();
-        facebookTable.setBackground(drawable("border"));
-        facebookTable.add(new VisImage(drawable("facebook"))).size(48, 48).row();
-        facebookTable.add(new VisLabel("Facebook")).padTop(5);
-        facebookTable.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.net.openURI("https://facebook.com/groups/995354408402399/");
-            }
-        });
-
-        VisTable whatsAppTable = new VisTable();
-        whatsAppTable.setBackground(drawable("border"));
-        whatsAppTable.add(new VisImage(drawable("whatsapp"))).size(48, 48).row();
-        whatsAppTable.add(new VisLabel("Whatsapp")).padTop(5);
-        whatsAppTable.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.net.openURI("https://chat.whatsapp.com/Bxu3kM0b1oE9UL0iZhti4E?mode=ems_copy_c");
-            }
-        });
-
+        // Telegram / Developer Info
         VisTable telegramTable = new VisTable();
         telegramTable.setBackground(drawable("border"));
         telegramTable.add(new VisImage(drawable("telegram"))).size(48, 48).row();
@@ -194,66 +172,40 @@ public class ProjectsListStage extends Stage {
         telegramTable.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.net.openURI("https://t.me/+pE4VREnP04s5NDNk");
+                VisDialog dialog = new VisDialog("Telegram & Owner");
+                Table content = dialog.getContentTable();
+                content.pad(15);
+                
+                // Load QR code image
+                FileHandle qrFile = Gdx.files.internal("images/telegram_qr.png");
+                if (qrFile.exists()) {
+                    content.add(new VisImage(Utils.getDrawable(qrFile))).size(180, 180).row();
+                }
+                
+                content.add(new VisLabel("t.me/Mr_M_F_D")).padTop(10).row();
+                VisLabel ownerLabel = new VisLabel("Developer / Owner:\nMilad Aziznezhad\n(میلاد عزیزنژاد)");
+                ownerLabel.setAlignment(Align.center);
+                content.add(ownerLabel).padTop(10).row();
+                
+                VisTextButton okBtn = new VisTextButton("OK");
+                okBtn.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        dialog.hide();
+                    }
+                });
+                
+                VisTable buttons = new VisTable();
+                buttons.add(okBtn).size(120, 40);
+                content.add(buttons).padTop(15).row();
+                
+                dialog.center();
+                dialog.pack();
+                dialog.show(ProjectsListStage.this);
             }
         });
 
-        VisTable discordTable = new VisTable();
-        discordTable.setBackground(drawable("border"));
-        discordTable.add(new VisImage(drawable("discord"))).size(48, 48).row();
-        discordTable.add(new VisLabel("Discord")).padTop(5);
-        discordTable.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.net.openURI("https://discord.gg/9gxPUTEP");
-            }
-        });
-
-        VisTable githubTable = new VisTable();
-        githubTable.setBackground(drawable("border"));
-        githubTable.add(new VisImage(drawable("github"))).size(48, 48).row();
-        githubTable.add(new VisLabel("GitHub")).padTop(5);
-        githubTable.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.net.openURI("https://github.com/star4droid/Star2D/");
-            }
-        });
-
-        VisTable youtubeTable = new VisTable();
-        youtubeTable.setBackground(drawable("border"));
-        youtubeTable.add(new VisImage(drawable("youtube"))).size(48, 48).row();
-        youtubeTable.add(new VisLabel("YouTube")).padTop(5);
-        youtubeTable.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.net.openURI("https://youtube.com/@star4droid?si=wNDqN_fbRIzf3KSQ");
-            }
-        });
-
-        VisTable donateTable = new VisTable();
-        donateTable.setBackground(drawable("border"));
-        donateTable.add(new VisImage(drawable("donate"))).size(48, 48).row();
-        donateTable.add(new VisLabel("Donate")).padTop(5);
-        donateTable.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                //app.openDonate.run();
-                app.toast("Coming soon...");
-            }
-        });
-
-        smallButtonsTable.add(whatsAppTable).size(150, 100).padRight(20).padTop(8);
-        smallButtonsTable.add(facebookTable).size(150, 100).padRight(20).padTop(8);
-
-        smallButtonsTable.add(telegramTable).size(150, 100).padRight(20).padTop(8).row();
-        smallButtonsTable.add(discordTable).size(150, 100).padRight(20).padTop(8);
-
-        smallButtonsTable.add(youtubeTable).size(150, 100).padRight(20).padTop(8);
-        smallButtonsTable.add(githubTable).size(150, 100).padRight(20).padTop(8).row();
-
-        smallButtonsTable.add(donateTable).growX().padTop(8).colspan(3).padLeft(9).padRight(9);
-
+        smallButtonsTable.add(telegramTable).size(150, 100).padTop(8).row();
         smallButtonsTable.add().growX();
         table.add(smallButtonsTable).growX().row();
 
@@ -274,7 +226,7 @@ public class ProjectsListStage extends Stage {
         VisImage logoImg = new VisImage(mainLogo);
         topSection.add(logoImg).size(30, 30);
 
-        VisLabel titleLabel = new VisLabel("Star2D.E");
+        VisLabel titleLabel = new VisLabel("Game Engine Persian Gulf");
         titleLabel.setFontScale(1.1f);
         topSection.add(titleLabel).padLeft(10).align(Align.left).expandX();
 

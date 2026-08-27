@@ -714,29 +714,47 @@ public class Utils {
 	 }
 	
 	public static void setLanguage(Context context){
-		if(EngineSettings.get()==null) EngineSettings.init(context);
-		String lng=EngineSettings.get().getString("lang",""),
-		local=EngineSettings.get().getString("local","");
-		if(!lng.equals("")){
-			java.util.Locale locale = new java.util.Locale(lng);
-			java.util.Locale.setDefault(locale);
-			android.content.res.Resources resources = context.getResources();
-			android.content.res.Configuration config = resources.getConfiguration();
-			config.setLocale(locale);
-			resources.updateConfiguration(config, resources.getDisplayMetrics());
-		}
-		AppCompatDelegate.setDefaultNightMode(EngineSettings.get().getBoolean("night",false)?AppCompatDelegate.MODE_NIGHT_YES:AppCompatDelegate.MODE_NIGHT_NO);
+		if(context == null) return;
+		try {
+			if(EngineSettings.get() == null) EngineSettings.init(context);
+			if(EngineSettings.get() != null) {
+				String lng = EngineSettings.get().getString("lang","");
+				if(!lng.equals("")){
+					java.util.Locale locale = new java.util.Locale(lng);
+					java.util.Locale.setDefault(locale);
+					android.content.res.Resources resources = context.getResources();
+					if(resources != null) {
+						android.content.res.Configuration config = resources.getConfiguration();
+						config.setLocale(locale);
+						resources.updateConfiguration(config, resources.getDisplayMetrics());
+					}
+				}
+				AppCompatDelegate.setDefaultNightMode(EngineSettings.get().getBoolean("night",false)?AppCompatDelegate.MODE_NIGHT_YES:AppCompatDelegate.MODE_NIGHT_NO);
+			}
+		} catch(Exception ignored){}
 	}
 	
-	public static void Log(String error,String string){
-		int x=0;
-		String str=star2dApp.getContext().getExternalFilesDir(null)+"/logs/log"+"%1$s"+".txt";
-		while(FileUtil.isExistFile(star2dApp.getContext().getExternalFilesDir(null)+"/logs/log"+x+".txt")){
-		    if(FileUtil.readFile(String.format(str,x+"")).equals(error+" :\n"+string))
-		    break;
-			x++;
-		}
-		FileUtil.writeFile(String.format(str,x+""),error+" :\n"+string);
+	public static void Log(String error, String string){
+		try {
+			android.util.Log.e(error_tag, error + " : " + string);
+			Context ctx = star2dApp.getContext();
+			if(ctx == null) return;
+			File logDir = ctx.getExternalFilesDir(null);
+			if(logDir == null) {
+				logDir = ctx.getFilesDir();
+			}
+			if(logDir == null) return;
+			String dirPath = logDir.getAbsolutePath() + "/logs";
+			FileUtil.makeDir(dirPath);
+			int x=0;
+			String str = dirPath + "/log%1$s.txt";
+			while(FileUtil.isExistFile(String.format(str, x + "")) && x < 50){
+				if(FileUtil.readFile(String.format(str, x + "")).equals(error + " :\n" + string))
+					break;
+				x++;
+			}
+			FileUtil.writeFile(String.format(str, x + ""), error + " :\n" + string);
+		} catch(Exception ignored){}
 	}
 		
 		public static String getStackTraceString2(Throwable throwable){

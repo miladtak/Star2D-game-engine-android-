@@ -1,0 +1,6 @@
+{
+  "name": "Game Engine Persian Gulf",
+  "description": "Game Engine Persian Gulf - Advanced 2D/3D Mobile Game Development Engine with Visual Scripting, Code Editor, AI Assistant and APK Exporter.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

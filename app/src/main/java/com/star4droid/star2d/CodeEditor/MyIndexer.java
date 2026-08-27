@@ -230,13 +230,26 @@ public class MyIndexer extends Indexer {
 	private void addJavaFile(Path path, Module module, FileManager fileManager) {
 		Optional<CharSequence> content = fileManager.getFileContent(path);
 		if (content.isPresent()) {
-			FileScope fileScope =
-			new AstScanner(IndexOptions.NON_PRIVATE_BUILDER.build())
-			.startScan(
-			parserContext.parse(path.toString(), content.get()),
-			path.toString(),
-			content.get());
-			module.addOrReplaceFileScope(fileScope);
+			try {
+				Object parsed = parserContext.getClass().getMethod("parse", String.class, CharSequence.class)
+					.invoke(parserContext, path.toString(), content.get());
+				Object scanner = new AstScanner(IndexOptions.NON_PRIVATE_BUILDER.build());
+				java.lang.reflect.Method startScanMethod = null;
+				for (java.lang.reflect.Method m : scanner.getClass().getMethods()) {
+					if (m.getName().equals("startScan") && m.getParameterCount() == 3) {
+						startScanMethod = m;
+						break;
+					}
+				}
+				if (startScanMethod != null) {
+					FileScope fileScope = (FileScope) startScanMethod.invoke(scanner, parsed, path.toString(), content.get());
+					if (fileScope != null) {
+						module.addOrReplaceFileScope(fileScope);
+					}
+				}
+			} catch (Throwable t) {
+				Log.e("MyIndexer", "Failed to parse java file: " + path, t);
+			}
 		}
 	}
 	

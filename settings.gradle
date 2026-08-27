@@ -15,7 +15,7 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "Star2D.E"
+rootProject.name = "Game Engine Persian Gulf"
 
 include(":app")
 include(":Formatter")

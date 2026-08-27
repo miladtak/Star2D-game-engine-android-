@@ -1,0 +1,79 @@
+<resources>
+    <string name="app_name">موتور بازی سازی خلیج فارس</string>
+    <string name="projects">پروژه‌ها</string>
+    <string name="tutorials">آموزش‌ها</string>
+    <string name="tutorial">آموزش</string>
+    <string name="community">انجمن</string>
+    <string name="close">بستن</string>
+	<string name="download">دانلود</string>
+	<string name="support">موتور بازی‌سازی خلیج فارس - توسعه یافته برای ساخت انواع بازی‌های ۲ بعدی و ۳ بعدی در موبایل اندروید همراه با اسکریپت‌نویسی بصری و کدنویسی جاوا.</string>
+	<string name="install">نصب</string>
+	<string name="cancel">لغو</string>
+	<string name="box_body">بدنه مکعبی (جعبه)</string>
+	<string name="particle_effect">افکت ذره‌ای (پارتیکل)</string>
+	<string name="custom_body">بدنه سفارشی</string>
+	<string name="circle_body">بدنه دایره‌ای</string>
+	<string name="text_item">آیتم متنی</string>
+	<string name="joystick_item">دسته بازی (جواستیک)</string>
+	<string name="progress_item">نوار پیشرفت</string>
+	<string name="your_images">تصاویر شما</string>
+	<string name="result">نتیجه</string>
+	<string name="frame_duration">مدت زمان فریم (میلی‌ثانیه)</string>
+	<string name="animation_pictures">تصاویر انیمیشن</string>
+	<string name="delete">حذف</string>
+	<string name="copy">کپی</string>
+	<string name="code_editor">ویرایشگر کد</string>
+	<string name="saved">با موفقیت ذخیره شد!</string>
+	<string name="save">ذخیره</string>
+	<string name="choose_color">انتخاب رنگ</string>
+	<string name="alpha">شفافیت (Alpha)</string>
+	<string name="select">انتخاب</string>
+	<string name="create_project">ساخت پروژه</string>
+	<string name="import_text">وارد کردن پروژه</string>
+	<string name="create">ایجاد</string>
+	<string name="error_send">خطایی رخ داد. می‌توانید متن خطا را کپی کنید:</string>
+	<string name="contact">تماس با ما</string>
+	<string name="icon_tap">آیکون (برای انتخاب لمس کنید)</string>
+	<string name="package_name">نام پکیج</string>
+	<string name="game_name">نام بازی</string>
+	<string name="version_code">کد نسخه</string>
+	<string name="version_name">نام نسخه</string>
+	<string name="portrait_game">بازی عمودی (پرتره)</string>
+	<string name="export">خروجی APK</string>
+	<string name="there_is_no_files">هیچ فایلی وجود ندارد</string>
+	<string name="click_plus_to_add">برای افزودن فایل روی (+) ضربه بزنید</string>
+	<string name="give_perm">لطفاً دسترسی‌های لازم را تایید کنید...</string>
+	<string name="ok">تایید</string>
+	<string name="add_joint">افزودن مفصل (Joint)</string>
+	<string name="please_wait">لطفاً صبر کنید...</string>
+	<string name="restore">بازیابی</string>
+	<string name="settings">تنظیمات</string>
+	<string name="new_project">پروژه جدید</string>
+	<string name="sections_list">لیست بخش‌ها</string>
+	<string name="pro_editor_enable">فعال‌سازی ویرایشگر کد پیشرفته (اندروید ۸+)</string>
+	<string name="d8_enable">فعال‌سازی کامپایلر D8 برای فایلهای Jar</string>
+	<string name="language">فارسی</string>
+	<string name="lang">fa</string>
+	<string name="restart_the_app">برای اعمال تغییر زبان، برنامه را دوباره باز کنید</string>
+	<string name="night_mode">حالت تاریک (Night Mode)</string>
+	<string name="edit">ویرایش</string>
+	<string name="translation_by">موتور بازیسازی خلیج فارس</string>
+	<string name="translator_url"></string>
+	<string name="compiler">کامپایلر</string>
+	<string name="enter_value">مقدار را وارد کنید</string>
+	<string name="point_light">نور نقطه‌ای</string>
+	<string name="directional_light">نور جهت‌دار</string>
+	<string name="cone_light">نور مخروطی</string>
+	<string name="enable_blur" translatable="false">Enable Blur</string>
+	<string name="blur_number" translatable="false">Blur Number</string>
+	<string name="culling" translatable="false">Enable Culling</string>
+	<string name="gamma_correction" translatable="false">Gamma Correction</string>
+	<string name="ambient_light" translatable="false">Ambient Light</string>
+	<string name="use_diffuse_light" translatable="false">Use Diffuse Light</string>
+	<string name="shadows" translatable="false">Enable Shadows</string>
+	<string name="light_settings">تنظیمات نور</string>
+	<string name="add_point">افزودن نقطه</string>
+	<string name="delete_the_point">حذف نقطه</string>
+	<string name="update_needed">دانلود به‌روزرسانی</string>
+	<string name="update">به‌روزرسانی</string>
+</resources>
