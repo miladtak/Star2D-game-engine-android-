@@ -8,10 +8,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 🔄 Checkout repository
+      # 🔄 دریافت کد از مخزن
       - uses: actions/checkout@v3
 
-      # ☕ Set up JDK 21
+      # ☕ نصب JDK 21
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
@@ -19,28 +19,21 @@ jobs:
           distribution: "temurin"
           cache: gradle
 
-      # 🛠 Setup Android NDK
+      # 🛠 نصب Android NDK
       - name: Setup Android NDK
         uses: nttld/setup-ndk@v1.5.0
         with:
           ndk-version: r28c
 
-      # 🖼️ Fix problematic PNG files (convert to RGB 8-bit)
-      - name: Fix PNG files
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y imagemagick
-          find app/src/main/res/drawable -name "*.png" -exec mogrify -strip -colors 256 -depth 8 {} \;
-
-      # 🔧 Ensure gradlew is executable
+      # 🔧 قابل اجرا کردن فایل gradlew
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # ⚡ Build APK
+      # ⚡ ساخت فایل APK
       - name: Build APK with Gradle
         run: ./gradlew clean assembleRelease
 
-      # 📦 Upload APK as artifact
+      # 📦 آپلود خروجی
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
