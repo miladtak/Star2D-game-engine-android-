@@ -1,4 +1,3 @@
-
 plugins {
     id 'com.android.application'  
 }
@@ -8,10 +7,10 @@ android {
     compileSdk 36
     buildToolsVersion '36.0.0'
     lint {
-    disable 'MissingTranslation', 'TypographyFractions'
-    checkOnly 'NewApi', 'HandlerLeak'
-    abortOnError false
-    checkReleaseBuilds false
+        disable 'MissingTranslation', 'TypographyFractions'
+        checkOnly 'NewApi', 'HandlerLeak'
+        abortOnError false
+        checkReleaseBuilds false
     }
     testOptions {
         unitTests.all {
@@ -59,6 +58,7 @@ android {
             minifyEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            crunchPngs false   // <---- این خط اضافه شده
         }
     }
     sourceSets {
@@ -106,7 +106,6 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.16.0'
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.google.guava:guava:32.0.1-android'
-  //  implementation 'com.google.guava:guava:guava-33.4.0-jre'
     implementation 'org.eclipse.jdt:ecj:3.26.0'
     implementation 'com.android.tools:r8:8.1.56'
     implementation platform("io.github.Rosemoe.sora-editor:bom:0.23.6")
@@ -130,13 +129,9 @@ dependencies {
 
     
     testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion"
-    // https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-backend-lwjgl
     testImplementation "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-    // https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-backend-android
     implementation "com.badlogicgames.gdx:gdx-backend-android:1.13.0"
-    // https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-box2d
     implementation "com.badlogicgames.gdx:gdx-box2d:1.13.0"
-    // https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-box2d-platform
     testImplementation "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion"
     constraints {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0") {
@@ -146,20 +141,13 @@ dependencies {
             because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
         }
     }
-// https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-box2d
     implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     
     implementation(platform("com.google.firebase:firebase-bom:34.3.0"))
-
     implementation("com.google.firebase:firebase-crashlytics-ndk")
     implementation("com.google.firebase:firebase-analytics")
-
-
 }
 
-// Called every time gradle gets executed, takes the native dependencies of
-// the natives configuration, and extracts them to the proper libs/ folders
-// so they get packed with the APK.
 tasks.register('copyAndroidNatives') {
     doFirst {
         file("libs/armeabi-v7a/").mkdirs()
